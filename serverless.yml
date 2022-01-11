@@ -1,0 +1,28 @@
+service: aws-django-serverless
+
+frameworkVersion: '2 || 3'
+
+custom:
+  wsgi:
+    app: django_serverless_app.wsgi.application
+
+provider:
+  name: aws
+  runtime: python3.8
+  lambdaHashingVersion: '20201221'
+  profile: personal
+
+functions:
+  api:
+    handler: wsgi_handler.handler
+    events:
+      - http:
+          path: /
+          method: ANY
+      - http:
+          path: /{proxy+}
+          method: ANY
+
+plugins:
+  - serverless-wsgi
+  - serverless-python-requirements
